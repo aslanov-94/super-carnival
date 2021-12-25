@@ -1,4 +1,4 @@
-package com.example.demo;
+package az.ingress.k8s.client;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
