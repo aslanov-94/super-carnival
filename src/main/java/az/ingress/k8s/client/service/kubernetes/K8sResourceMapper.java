@@ -12,9 +12,7 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-public interface MainRequiredComponent {
-
-    String DEFAULT_NS = "default";
+public interface K8sResourceMapper {
 
     default Map<String, KubernetesResourceDto> mapK8sObjectListToResourceMap(List<? extends KubernetesObject> items) {
         return items.stream()
