@@ -6,4 +6,6 @@ import java.util.Map;
 
 public interface AppApiService extends K8sResourceMapper {
     Map<String, KubernetesResourceDto> getDeployments(String namespace);
+
+    Map<String, KubernetesResourceDto> getStatefulSet(String namespace);
 }
