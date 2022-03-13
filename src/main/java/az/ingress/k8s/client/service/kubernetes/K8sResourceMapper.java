@@ -1,7 +1,8 @@
 package az.ingress.k8s.client.service.kubernetes;
 
-import az.ingress.k8s.client.dto.K8sResourceOwnerDto;
+import az.ingress.k8s.client.dto.K8sResourceRelationDto;
 import az.ingress.k8s.client.dto.KubernetesResourceDto;
+import az.ingress.k8s.client.enums.ResourceKind;
 import io.kubernetes.client.common.KubernetesObject;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1OwnerReference;
@@ -41,15 +42,14 @@ public interface K8sResourceMapper {
         );
     }
 
-    private List<K8sResourceOwnerDto> mapOwnerReferenceToDto(List<V1OwnerReference> ownerReferences) {
+    private List<K8sResourceRelationDto> mapOwnerReferenceToDto(List<V1OwnerReference> ownerReferences) {
         if (Objects.isNull(ownerReferences)) {
             return List.of();
         }
         return ownerReferences.stream()
                 .filter(Objects::nonNull)
-                .map(reference -> K8sResourceOwnerDto.builder()
-                        .apiVersion(reference.getApiVersion())
-                        .kind(reference.getKind())
+                .map(reference -> K8sResourceRelationDto.builder()
+                        .kind(ResourceKind.findResourceKind(reference.getKind()))
                         .name(reference.getName())
                         .build()
                 )

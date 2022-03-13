@@ -1,5 +1,6 @@
 package az.ingress.k8s.client.dto;
 
+import az.ingress.k8s.client.enums.ResourceKind;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,11 +12,9 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class K8sResourceOwnerDto {
+public class K8sResourceRelationDto {
 
-    private String apiVersion;
-
-    private String kind;
+    private ResourceKind kind;
 
     private String name;
 
