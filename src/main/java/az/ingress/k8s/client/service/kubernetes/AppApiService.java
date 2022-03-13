@@ -10,4 +10,6 @@ public interface AppApiService extends K8sResourceMapper {
     Map<String, KubernetesResourceDto> getStatefulSet(String namespace);
 
     Map<String, KubernetesResourceDto> getReplicaSet(String namespace);
+
+    Map<String, KubernetesResourceDto> getDaemonSet(String namespace);
 }
