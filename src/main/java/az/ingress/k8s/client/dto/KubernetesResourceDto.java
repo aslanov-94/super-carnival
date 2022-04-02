@@ -50,4 +50,12 @@ public class KubernetesResourceDto {
     public int hashCode() {
         return Objects.hash(name, namespace, kind);
     }
+
+    @Override
+    public String toString() {
+        return "KubernetesResourceDto{" +
+                "name='" + name + '\'' +
+                ", kind='" + kind + '\'' +
+                '}';
+    }
 }
