@@ -1,6 +1,7 @@
 package az.ingress.k8s.client.service.kubernetes.impl;
 
 import az.ingress.k8s.client.dto.KubernetesResourceDto;
+import az.ingress.k8s.client.enums.ResourceKind;
 import az.ingress.k8s.client.service.kubernetes.ConnectionComponent;
 import az.ingress.k8s.client.service.kubernetes.CoreApiService;
 import io.kubernetes.client.openapi.ApiException;
@@ -28,7 +29,7 @@ public class CoreApiServiceImpl extends ConnectionComponent implements CoreApiSe
                     10, false);
             List<V1Pod> pods = v1PodList.getItems();
 
-            return mapK8sObjectListToResourceMap(pods);
+            return mapK8sObjectListToResourceMap(pods, ResourceKind.POD);
         } catch (ApiException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

@@ -1,6 +1,7 @@
 package az.ingress.k8s.client.service.kubernetes.impl;
 
 import az.ingress.k8s.client.dto.KubernetesResourceDto;
+import az.ingress.k8s.client.enums.ResourceKind;
 import az.ingress.k8s.client.service.kubernetes.AppApiService;
 import az.ingress.k8s.client.service.kubernetes.ConnectionComponent;
 import io.kubernetes.client.openapi.ApiException;
@@ -30,7 +31,7 @@ public class AppApiServiceImpl extends ConnectionComponent implements AppApiServ
                             10, false)
                     .getItems();
 
-            return mapK8sObjectListToResourceMap(items);
+            return mapK8sObjectListToResourceMap(items, ResourceKind.DEPLOYMENT);
         } catch (ApiException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -49,7 +50,7 @@ public class AppApiServiceImpl extends ConnectionComponent implements AppApiServ
                             10, false)
                     .getItems();
 
-            return mapK8sObjectListToResourceMap(items);
+            return mapK8sObjectListToResourceMap(items, ResourceKind.STATEFUL_SET);
         } catch (ApiException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -68,7 +69,7 @@ public class AppApiServiceImpl extends ConnectionComponent implements AppApiServ
                             10, false)
                     .getItems();
 
-            return mapK8sObjectListToResourceMap(items);
+            return mapK8sObjectListToResourceMap(items, ResourceKind.REPLICA_SET);
         } catch (ApiException e) {
             e.printStackTrace();
             throw new RuntimeException(e);
@@ -87,7 +88,7 @@ public class AppApiServiceImpl extends ConnectionComponent implements AppApiServ
                             10, false)
                     .getItems();
 
-            return mapK8sObjectListToResourceMap(items);
+            return mapK8sObjectListToResourceMap(items, ResourceKind.DAEMON_SET);
         } catch (ApiException e) {
             e.printStackTrace();
             throw new RuntimeException(e);

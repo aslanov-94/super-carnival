@@ -6,6 +6,7 @@ import az.ingress.k8s.client.enums.ResourceKind;
 import io.kubernetes.client.common.KubernetesObject;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1OwnerReference;
+import lombok.NonNull;
 
 import java.util.List;
 import java.util.Map;
@@ -15,9 +16,10 @@ import java.util.stream.Collectors;
 
 public interface K8sResourceMapper {
 
-    default Map<String, KubernetesResourceDto> mapK8sObjectListToResourceMap(List<? extends KubernetesObject> items) {
+    default Map<String, KubernetesResourceDto> mapK8sObjectListToResourceMap(List<? extends KubernetesObject> items,
+                                                                             @NonNull ResourceKind kind) {
         return items.stream()
-                .map(this::mapKubernetesObjectToResourceDto)
+                .map(k8sObject -> mapKubernetesObjectToResourceDto(k8sObject, kind.getKind()))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors
@@ -25,7 +27,8 @@ public interface K8sResourceMapper {
                                 kubernetesResourceDto -> kubernetesResourceDto));
     }
 
-    private Optional<KubernetesResourceDto> mapKubernetesObjectToResourceDto(KubernetesObject kubernetesObject) {
+    private Optional<KubernetesResourceDto> mapKubernetesObjectToResourceDto(KubernetesObject kubernetesObject,
+                                                                             String kind) {
         if (Objects.isNull(kubernetesObject.getMetadata())) {
             return Optional.empty();
         }
@@ -36,7 +39,7 @@ public interface K8sResourceMapper {
                         .namespace(metadata.getNamespace())
                         .name(metadata.getName())
                         .labels(metadata.getLabels())
-                        .kind(kubernetesObject.getKind())
+                        .kind(kind)
                         .resourceOwners(mapOwnerReferenceToDto(metadata.getOwnerReferences()))
                         .build()
         );
