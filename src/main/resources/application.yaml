@@ -1,4 +1,4 @@
 server:
   port: 8895
   servlet:
-    context-path: /api/k8s-client
+    context-path: /super-carnival/api
