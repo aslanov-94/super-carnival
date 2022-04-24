@@ -3,7 +3,7 @@ package az.ingress.k8s.client.service.graph;
 import az.ingress.k8s.client.dto.KubernetesResourceDto;
 import az.ingress.k8s.client.enums.ResourceKind;
 import az.ingress.k8s.client.service.kubernetes.AppApiService;
-import az.ingress.k8s.client.service.kubernetes.CoreApiService;
+import az.ingress.k8s.client.service.kubernetes.PodService;
 import lombok.RequiredArgsConstructor;
 import org.jgrapht.Graph;
 import org.jgrapht.graph.DefaultEdge;
@@ -18,7 +18,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class GraphServiceImpl implements GraphService {
 
-    private final CoreApiService coreApiService;
+    private final PodService podService;
     private final AppApiService appApiService;
 
     @Override
@@ -48,7 +48,7 @@ public class GraphServiceImpl implements GraphService {
         EnumMap<ResourceKind, Map<String, KubernetesResourceDto>> clusterResources = new EnumMap<>(ResourceKind.class);
 
 
-        clusterResources.put(ResourceKind.POD, coreApiService.getPods(namespace));
+        clusterResources.put(ResourceKind.POD, podService.getPods(namespace));
         clusterResources.put(ResourceKind.DEPLOYMENT, appApiService.getDeployments(namespace));
         clusterResources.put(ResourceKind.STATEFUL_SET, appApiService.getStatefulSet(namespace));
         clusterResources.put(ResourceKind.REPLICA_SET, appApiService.getReplicaSet(namespace));
@@ -59,14 +59,14 @@ public class GraphServiceImpl implements GraphService {
     private void addClusterResourcesToGraph(Graph<KubernetesResourceDto, DefaultEdge> graph,
                                             EnumMap<ResourceKind, Map<String, KubernetesResourceDto>> clusterResources) {
         clusterResources.values()
-                .forEach(stringKubernetesResourceDtoMap -> stringKubernetesResourceDtoMap.values()
+                .forEach(kubernetesResourcesMap -> kubernetesResourcesMap.values()
                         .forEach(graph::addVertex));
     }
 
     private void addRelationsBetweenResources(Graph<KubernetesResourceDto, DefaultEdge> graph,
                                               EnumMap<ResourceKind, Map<String, KubernetesResourceDto>> clusterResources) {
         clusterResources.values()
-                .forEach(stringKubernetesResourceDtoMap -> stringKubernetesResourceDtoMap.values()
+                .forEach(kubernetesResourcesMap -> kubernetesResourcesMap.values()
                         .forEach(kubernetesResourceDto -> kubernetesResourceDto.getResourceOwners()
                                 .forEach(k8sResourceRelationDto -> {
                                     Map<String, KubernetesResourceDto> resources =

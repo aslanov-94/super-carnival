@@ -15,6 +15,9 @@ public enum ResourceKind {
     STATEFUL_SET("StatefulSet"),
     DAEMON_SET("DaemonSet"),
     POD("Pod"),
+    CONFIG_MAP("ConfigMap"),
+    SECRET("Secret"),
+    PERSISTENT_VOLUME_CLAIM("PersistentVolumeClaim"),
     NOT_IMPLEMENTED("NAN");
 
     private static final List<ResourceKind> RESOURCE_KINDS = List.of(ResourceKind.values());

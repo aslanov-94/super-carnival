@@ -19,7 +19,7 @@ public interface K8sResourceMapper {
     default Map<String, KubernetesResourceDto> mapK8sObjectListToResourceMap(List<? extends KubernetesObject> items,
                                                                              @NonNull ResourceKind kind) {
         return items.stream()
-                .map(k8sObject -> mapKubernetesObjectToResourceDto(k8sObject, kind.getKind()))
+                .map(k8sObject -> mapKubernetesObjectToResourceDto(k8sObject, kind))
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors
@@ -27,8 +27,8 @@ public interface K8sResourceMapper {
                                 kubernetesResourceDto -> kubernetesResourceDto));
     }
 
-    private Optional<KubernetesResourceDto> mapKubernetesObjectToResourceDto(KubernetesObject kubernetesObject,
-                                                                             String kind) {
+    default Optional<KubernetesResourceDto> mapKubernetesObjectToResourceDto(KubernetesObject kubernetesObject,
+                                                                             @NonNull ResourceKind kind) {
         if (Objects.isNull(kubernetesObject.getMetadata())) {
             return Optional.empty();
         }
@@ -39,7 +39,7 @@ public interface K8sResourceMapper {
                         .namespace(metadata.getNamespace())
                         .name(metadata.getName())
                         .labels(metadata.getLabels())
-                        .kind(kind)
+                        .kind(kind.getKind())
                         .resourceOwners(mapOwnerReferenceToDto(metadata.getOwnerReferences()))
                         .build()
         );
